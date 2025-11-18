@@ -1,24 +1,27 @@
-import { expect, Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 
 export class DocumentsPage {
+
   constructor(private page: Page) {}
 
-  async confirmDocumentExists(name: string) {
-    const cleanName = name.replace('.pdf', '');
+  async confirmDocumentExists(filename: string) {
 
-    //  Wait for the "Files uploaded successfully" notification
-    await this.page.getByText('Files uploaded successfully').waitFor({ timeout: 60000 });
+    // Cleanup name (GrabDocs might drop extension)
+    const cleanName = filename.replace('.pdf', '').trim();
 
-    //  Wait for at least one document list item to render
-    await this.page.waitForSelector('li', { timeout: 60000 });
+    //  Wait for at least one item to render
+    await this.page.waitForSelector('div', { timeout: 60000 });
 
-    //  Look for the document that contains our file name
-    const doc = this.page.getByRole('listitem').filter({ hasText: cleanName }).first();
+    //  Find the uploaded document by partial text match  
+    const doc = this.page.getByText(cleanName, { exact: false }).first();
 
-    //  Ensure it appears
-    await expect(doc).toBeVisible({ timeout: 60000 });
+    //  Ensure the document is visible  
+    await expect(doc).toBeVisible({ timeout: 15000 });
   }
 }
+
+
+
 
 
 

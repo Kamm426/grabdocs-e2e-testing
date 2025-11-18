@@ -3,6 +3,10 @@ import { LoginPage } from '../pages/LoginPage';
 import { UploadPage } from '../pages/UploadPage';
 import { DocumentsPage } from '../pages/DocumentsPage';
 import { LogoutPage } from '../pages/LogoutPage';
+import { DownloadPage } from '../pages/DownloadPage';
+import { CalendarPage } from '../pages/CalendarPage';
+import { FeedbackPage } from '../pages/FeedbackPage';
+
 
 test('GrabDocs End-to-End', async ({ page }) => {
 
@@ -20,6 +24,19 @@ test('GrabDocs End-to-End', async ({ page }) => {
   // Verify upload appears in docs list
   const documentsPage = new DocumentsPage(page);
   await documentsPage.confirmDocumentExists('sample.pdf');
+
+  // Download
+  const downloadPage = new DownloadPage(page);
+await downloadPage.downloadFile('sample.pdf');
+
+
+  // Calendar
+  const calendarPage = new CalendarPage(page);
+  await calendarPage.openCalendar();
+
+  //Feedback form
+  const feedbackPage = new FeedbackPage(page);
+  await feedbackPage.submitFeedback();
 
   // Logout
   const logoutPage = new LogoutPage(page);
